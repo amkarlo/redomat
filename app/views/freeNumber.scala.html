@@ -1,0 +1,52 @@
+@import services.BankData
+@import com.google.gson.Gson
+@import helper._ 
+
+@(user: String)(message: String)(result: List[BankData])
+
+@admin(user, message) {
+
+    <div class="container-fluid">
+        <div class="row">
+            <div style="position:relative">
+                <div id="date" class="show-date"></div> 
+                <br><br>
+                <div class="top-left">
+                    <select class="chosen">
+                        <option selected disabled> Odaberite poslovnicu </option>
+                    </select>
+                </div>
+                <div class="table-admin">
+                    <div id="table"></div>
+                </div>
+            </div>
+        </div>
+            
+    </div>
+	<script>
+        var offices = @{Html(new Gson().toJson(result))};
+
+		$('document').ready(function(){
+            // set active tab
+    		$($('#s1').parent()).addClass('active');
+
+            var date = Date.today();
+            today = date.toString('dd-MMM-yyyy');
+            $('#date').html(today);
+
+            for (var i = 0; i < offices.length; i++)
+            {
+                $('.chosen').append($('<option>', {value: (i + 1), text:offices[i]['name']}));
+            }
+
+            $('.chosen').chosen();
+
+            $('.chosen').on('change', function(evt, params) {
+                printOffice(offices[params.selected-1], params.selected);
+            });
+           
+    	});   
+
+	</script>
+}
+ 

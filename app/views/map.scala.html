@@ -1,0 +1,126 @@
+@import services.Place
+@import com.google.gson.Gson
+@import helper._ 
+
+@(message: String)(result: List[Place])
+
+@main("Lokator") {
+
+	<h3>@Html(message)</h3>
+
+    <div id="map"></div>
+    <script>
+
+    var data = @{Html(new Gson().toJson(result))};
+    var office;
+    var features = new Array();
+    var offices;    
+    var closest;
+
+    $('document').ready(function(){
+    		$($('#s2').parent()).addClass('active');
+
+        for (var i = 0; i < data.length; i++)
+        {
+          office = {
+              type: 'Feature',
+              geometry: {type: 'Point', coordinates: [data[i].lng,  data[i].lat] },
+              properties: {name: data[i].name, address: data[i].address, number: data[i].id}
+            };
+          features.push(office);
+        }
+
+        offices = {
+          type: 'FeatureCollection',
+          features: features
+        };  
+        
+    	}); 
+
+      function initMap(map) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+                  center: {lat: 45.8150, lng: 15.973431},
+                  zoom: 12
+              });
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            var mojaLokacija = {
+            url: "@routes.Assets.versioned("images/location-icon.png")",
+            // This marker is 20 pixels wide by 32 pixels high.
+            size: new google.maps.Size(32, 32),
+            // The origin for this image is (0, 0).
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at (0, 32).
+            anchor: new google.maps.Point(0, 32)
+            }; 
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                title: 'Vaša lokacija',
+                icon: mojaLokacija
+            });
+            map.setCenter(pos);
+            userLocation(pos);
+            }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } 
+        else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+            closestOffice(pos.lat, pos.lng);
+            }
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+        }; 
+
+        var closestIcon = {
+            url: "@routes.Assets.versioned("images/closest-location-icon.png")",
+            // This marker is 20 pixels wide by 32 pixels high.
+            size: new google.maps.Size(20, 36),
+            // The origin for this image is (0, 0).
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at (0, 32).
+            anchor: new google.maps.Point(0, 32)
+        };      
+        
+        // Add some markers to the map.
+        map.data.setStyle(function(feature) {
+            if (feature.getProperty('number') == closest) 
+            {
+                return {
+                    title: feature.getProperty('name'),
+                    shape: shape,
+                    icon: closestIcon,
+                    onclick: getANumber
+                };
+            }         	
+            else {
+                return {
+                title: feature.getProperty('name'),
+                shape: shape,
+                onclick: getANumber
+                };
+            }
+        });
+        map.data.addGeoJson(offices);
+
+        // Set mouseover event for each feature.
+        map.data.addListener('click', function(event) {
+            getANumber(event);
+        });
+        
+    }   	
+	 </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC77t8e7zeH8-awKZ44L6bkYObfydm5-Uw&callback=initMap"
+    async defer></script>
+	
+}

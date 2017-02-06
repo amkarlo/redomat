@@ -1,0 +1,59 @@
+@import play.data.Form;
+@import services.User;
+@import helper._
+
+@(message: String, errorMessage: String, form: Form[User])
+
+@main("Dobrodošli"){
+
+		<div class="head-bg sTop">
+			<div class="container">
+				<div class="header-note">
+					<span class="border"> </span>
+						<h1>Redomat</h1>
+						<p> @Html(message)</p>
+				</div>	
+			</div>
+		<div class="hide-form col-xs-5 pull-right">
+			@helper.form(routes.AdminController.getUser) {
+				<div class="row">
+					<div class="col-xs-10">						
+						<p class="title">Admin login</p> <span>@errorMessage</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-xs-10">
+				 		<input type="email" class="form-control" name="email" placeholder="Email" value='@form.field("email").value'>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-xs-10">
+						<input type="password" class="form-control" name="password" placeholder="Password" value='@form.field("password").value'>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-xs-5">
+							<input name="action" value="Login" type="submit" class="btn btn-primary"></input>
+							<input name="action" value="SignUp" type="submit" class="btn btn-primary"></input>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+	<script>
+		$('document').ready(function(){
+    		$($('#s1').parent()).addClass('active');
+    	});
+	</script>
+}
+
+
+

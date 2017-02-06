@@ -1,0 +1,41 @@
+@import services.BankData
+@import com.google.gson.Gson
+@import helper._ 
+
+@(user: String)(message: String)(result: List[BankData])
+
+@admin(user, message) {
+
+    <div class="container-fluid">
+        <div class="row">
+            <div style="position:relative">
+                <div id="date" class="show-date"></div> 
+                <br><br>
+                <div class="table-admin">
+                    <div id="table"></div>
+                </div>
+            </div>
+        </div>
+            
+    </div>
+	<script>
+        var offices = @{Html(new Gson().toJson(result))};
+        var services;
+
+		$('document').ready(function(){
+            // set active tab
+    		$($('#s2').parent()).addClass('active');
+
+            var date = Date.today();
+            today = date.toString('dd-MMM-yyyy');
+            $('#date').html(today);
+
+            services = JSON.parse(localStorage.getItem('BankServices'));
+
+            printOffices();
+           
+    	});   
+
+	</script>
+}
+ 

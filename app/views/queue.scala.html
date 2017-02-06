@@ -1,0 +1,59 @@
+@import services.BankData
+@import com.google.gson.Gson
+@import helper._ 
+
+@(message: String)(result: List[BankData])
+
+@main(message) {
+
+    <div class="container-fluid">
+        <div class="row">
+            <div style="position:relative">
+                <div id="date" class="show-date"></div> 
+                <br><br>
+                <div id="table"></div>
+            </div>
+        </div>            
+    </div>
+	<script>
+        var offices = @{Html(new Gson().toJson(result))};
+        var services;
+        var activeNums;
+
+		$('document').ready(function(){
+            // set active tab
+    		$($('#s3').parent()).addClass('active');
+
+            var date = Date.today();
+            today = date.toString('dd-MMM-yyyy');
+            $('#date').html(today);
+
+            services = JSON.parse(localStorage.getItem('BankServices'));
+            checkIfActive();
+
+            for (var i = 0; i < offices.length; i++)
+            {
+                printOffice(offices[i], i+1);
+            }
+
+            $('.getNumber').on('click', function(){
+                var id = $(this).attr('id');
+                var service = $(this).attr('service');
+                $.ajax({
+                        type: 'POST',
+                        url: "/getNumber/"+ service +"/" + id + "/0/0",
+                        success: function(data) {
+							window.location.href = data;
+						},
+                        error : function(data) {
+                            console.log('Error : getNumber');
+                        }
+                    });      
+            });
+    	});
+
+       
+
+	</script>
+}
+ 

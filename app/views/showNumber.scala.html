@@ -1,0 +1,30 @@
+
+@(id: Int)(number: Int)(service: String)
+
+@main(service) {
+
+		<div class="sTop">
+			<div class="container">
+				<div class="header-note">
+					<span class="border"> </span>
+						<h3>Dodijeljen vam je broj: @number za uslugu: @service</h3>
+						 Dodijeljene brojeve pogledajte pod linkom Aktivni brojevi.
+						<span>  </span>						
+				</div>
+			</div>
+		</div>
+
+	<script>
+		$('document').ready(function(){
+			var service = '@service';
+			// set the values in local storage
+			var values = new Array();
+			values.push('@id');
+			values.push('@number');
+			values.push(new Date().getTime());
+			var services = JSON.parse(localStorage.getItem('BankServices'));
+			services[service] = values;
+			localStorage.setItem('BankServices', JSON.stringify(services));
+    	});		 
+	</script>
+}

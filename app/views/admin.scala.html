@@ -1,0 +1,63 @@
+@import helper._
+
+@(user: String, title: String)(content: Html)
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>@title</title>
+        <link href="@routes.Assets.versioned("css/bootstrap.css")" rel='stylesheet' type='text/css' />
+		<link href="@routes.Assets.versioned("css/maps.css")" rel='stylesheet' type='text/css' />
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="@routes.Assets.versioned("js/bootstrap.min.js")"></script>
+		<script src="@routes.Assets.versioned("js/admin.js")"></script>
+		<script src="@routes.Assets.versioned("js/date.js")"></script>
+		<script src="@routes.Assets.versioned("js/chosen.jquery.min.js")"></script>
+         <!-- Custom Theme files -->
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/theme-style.css")" /> 
+		<link rel="stylesheet" href="@routes.Assets.versioned("css/font-awesome.min.css")" />
+		<link rel="stylesheet" href="@routes.Assets.versioned("css/chosen.min.css")" /> 
+		<link rel="icon" href="@routes.Assets.versioned("images/favicon.png")" type="image/x-icon" />
+    </head>
+    <body>     
+		<!--start-top-nav-->
+		<nav class="subMenu navbar-custom navbar-scroll-top" role="navigation">
+	        <div class="container">
+	            <div class="navbar-header page-scroll">
+	               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+	                    <img src="@routes.Assets.versioned("images/menu-icon-grey.png")" title="drop-down-menu" /> 
+	                </button>
+	            </div>
+	            <div class="collapse navbar-collapse navbar-main-collapse top-nav">
+	                <ul class="nav navbar-nav full-nav-top"> 
+	                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+	                    <li>
+	                        <a id="s1" class="subNavBtn" href="@routes.AdminController.admin">Početna</a>
+	                    </li>
+	                    <li>
+	                        <a id="s2" class="subNavBtn" href="@routes.AdminController.viewAll">Pregledaj sve</a>
+	                    </li>                         
+	                </ul>
+                    <div class="row">
+                    <div class="col-xs-2 pull-right top-right">
+                     Dobrodošao, @user
+	                    <a class="center" href="@routes.AdminController.logout">Logout</a>
+                    </div>
+                    </div>
+	            </div>
+	        </div>
+   	  </nav>
+		<!--//End-top-nav-->
+        @content
+
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="@routes.Assets.versioned("js/bootstrap.min.js")"></script>
+    
+    </body>
+</html> 

@@ -1,0 +1,44 @@
+@import services.BankData
+@import com.google.gson.Gson
+@import helper._ 
+
+@(message: String)(result: List[BankData])
+
+@main(message) {
+    <div class="container-fluid">
+        <div class="row">
+            <div style="position:relative">
+                <div id="date" class="show-date"></div> 
+                <br><br>
+                <div class="cont">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table id="activeTable" class="table-hover table-condensed center"> </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>            
+    </div>
+	<script>
+        var offices = @{Html(new Gson().toJson(result))};
+        var services;
+        var activeNums;
+
+		$('document').ready(function(){
+            // set active tab
+    		$($('#s4').parent()).addClass('active');
+            
+            var date = Date.today();
+            today = date.toString('dd-MMM-yyyy');
+            $('#date').html(today);
+
+            // write all active numbers
+            services = JSON.parse(localStorage.getItem('BankServices'));
+            checkIfActive();
+
+            var i=0;
+            Object.keys(services).forEach(key => printActiveToTable(services[key], key, i++));  
+    	});
+	</script>
+}

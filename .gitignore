@@ -1,0 +1,11 @@
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/.sbtserver/*
+Redomat.sql
+/project/*
+/RUNNING_PID

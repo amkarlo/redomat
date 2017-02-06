@@ -1,0 +1,43 @@
+@import services.BankData
+@import com.google.gson.Gson
+@import helper._ 
+
+@(id: Int)(result: List[BankData])
+
+@main("Odaberite uslugu") {
+	 <div class="container-fluid">
+        <div class="row">
+            <div style="position:relative">
+                <div id="date" class="show-date"></div> 
+                <br><br>
+                <div class="cont">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table id="chooseService" class="table-hover table-condensed center"> </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>            
+    </div>
+	<script>
+		var offices = @{Html(new Gson().toJson(result))};
+		var activeNums;
+        var services;
+        var bankId = @id;
+
+		$('document').ready(function(){
+	 		var date = Date.today();
+            today = date.toString('dd-MMM-yyyy');
+            $('#date').html(today);
+
+			// write all active numbers
+            services = JSON.parse(localStorage.getItem('BankServices'));
+            checkIfActive();
+            var i = 0;
+            Object.keys(services).forEach(key => printToTable(services[key], key, i++));  
+
+    	});
+		
+	</script>
+}
